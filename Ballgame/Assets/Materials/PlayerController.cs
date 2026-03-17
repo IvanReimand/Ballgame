@@ -1,22 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using UnityEngine.SceneManagement;
 using TMPro;
 
-
 public class PlayerController : MonoBehaviour
-
+{
     public float Speed;
-    public TMP_Text AcoreText;
+    public TMP_Text ScoreText;
     public TMP_Text WinText;
     public GameObject Gate;
-    private Rigidbody rb;
-    public interface Score;
 
-{
-    // Start is called before the first frame update
+    private Rigidbody rb;
+    private int Score;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -25,23 +22,21 @@ public class PlayerController : MonoBehaviour
         WinText.text = "";
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float moveHorizontal = Input.GetAxis("Horisontal");
+        float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
         rb.AddForce(movement * Speed);
 
-        //Restart level
+        // Restart level
         if (Input.GetKeyDown(KeyCode.R))
-        { 
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        //Quit game
+        // Quit game
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
@@ -55,24 +50,26 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             Score++;
             SetScoreText();
-            if(Score >=5)
+
+            if (Score >= 5)
             {
-                Gate.gameObject.SetActive(false);
+                Gate.SetActive(false);
             }
         }
 
-        if(other.gameObject.CompareTag("danger"))
+        if (other.gameObject.CompareTag("danger"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
     void SetScoreText()
     {
-        SetScoreText().text = "Score: " + Score.ToString();
+        ScoreText.text = "Score: " + Score.ToString();
 
-        if(Score == 10)
+        if (Score == 10)
         {
-            WinText.text = "You win! Press ´R´"
+            WinText.text = "You win! Press 'R'";
         }
     }
 }
